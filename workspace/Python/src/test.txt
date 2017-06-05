@@ -1,0 +1,1372 @@
+
+
+
+
+
+
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="/css/globalBeta.css">
+<link rel="stylesheet" type="text/css" href="/css/calculator.css">
+<link rel="stylesheet" type="text/css" href="/css/alg.css">
+
+<script language="JavaScript" src="/alg/data/algMMY.js"></script>
+<script language="JavaScript1.2">
+function populateMakes(){
+    for (i=0;i<algMmyArray.length-1;i++){
+    var singleMmy = algMmyArray[i].split(',');
+    var d = document.mmyForm.makename;
+    var opt = d.length-1;
+        if (singleMmy[0] != d.options[opt].value){
+        d.options[d.length] = new Option(singleMmy[0],singleMmy[0]);
+            
+        }
+    }
+    d.options[1].selected=true;
+}
+function populateModels(aMake){
+    var d = document.mmyForm.modelname;
+    d.length=1;
+    
+    for (i=0;i<algMmyArray.length;i++){
+    var singleMmy = algMmyArray[i].split(',');
+    var opt = d.length-1;
+        if (singleMmy[0] == aMake && singleMmy[1] != d.options[opt].value){
+        d.options[d.length] = new Option(singleMmy[1],singleMmy[1]);
+        }
+    }
+    d.options[1].selected=true;
+    populateYears(d.options[1].value);
+}
+
+function populateYears(aModel){
+    var d = document.mmyForm.year;
+    d.length=1;
+    for (i=0;i<algMmyArray.length;i++){
+    var singleMmy = algMmyArray[i].split(',');
+    var opt = d.length-1;
+        if (singleMmy[1] == aModel && singleMmy[2] != d.options[opt].value){
+        d.options[d.length] = new Option(singleMmy[2],singleMmy[2]);
+        }
+    }
+    d.options[1].selected=true;
+}
+
+var mr=false;
+if(""=="true") mr=true;
+
+function fillResidualValue(rv,vp,rate,term){
+    var calcURL="/go/advice/financing/calc/loanLeaseCalc.jsp";
+    var rvLease=rv;
+    var vpLease=vp;
+    var rateLease=rate;
+    var termLease=term;
+
+    if(!mr && opener != null){
+        try { 
+        var f = opener.document.forms;
+        f['LoanLeaseResultForm'].rvLease.value=rvLease;
+        opener.recalculate(f['LoanLeaseResultForm'].rvLease);
+        f['LoanLeaseResultForm'].acLease.value=rvLease;
+        opener.recalculate(f['LoanLeaseResultForm'].rvLease);
+        f['LoanLeaseResultForm'].vpLease.value=vpLease;
+        opener.recalculate(f['LoanLeaseResultForm'].vpLease);
+        f['LoanLeaseResultForm'].rateLease.value=rateLease;
+        opener.recalculate(f['LoanLeaseResultForm'].rateLease);
+
+        var t=opener.document.forms['LoanLeaseResultForm'].termLease;
+        for(i=0;i<t.length;i++){
+            if(parseInt(t.options[i].value)==parseInt(termLease)){
+            t.options[i].selected=true;
+	        }
+        }
+    opener.recalculate(f['LoanLeaseResultForm'].termLease);
+    opener.focus();
+        }
+        catch(exception){
+        var calcWin=window.open(calcURL, "calculator", "left=50,top=50,width=663,height=572,scrollbars,resizable");
+    calcWin.focus();
+        }
+    }else{
+        var calcWin=window.open(calcURL, "calculator", "left=50,top=50,width=663,height=572,scrollbars,resizable");
+    calcWin.focus();
+    }
+
+   if(opener) self.close();
+}
+function preSelect(){
+var d = document.mmyForm.makename;
+var md=document.mmyForm.modelname;
+    
+    for (i=0;i<d.length;i++){
+        if("Hyundai" == d.options[i].value){
+        d.options[i].selected=true; 
+        populateModels(d.options[d.selectedIndex].value);
+        }
+    }
+    
+    
+    for (i=0;i<md.length;i++){
+        if("ACCENT" == md.options[i].value){
+        md.options[i].selected = true;
+        populateYears(md.options[md.selectedIndex].value);
+        }
+    }
+    
+}
+</script>
+
+</head>
+<body topmargin="0" marginheight="0" bgcolor="#FFFFFF" marginwidth="5" leftmargin="5">
+<table border="0" width="520" bgcolor="#ffffff">
+<tr valign="top"><td><img src="/advice/financing/calc/images/logo_calc.gif" width="71" height="35" border="0"></td><td class="header"><h1>Residual Values</h1>
+<p class="cplarger">The projected market value of a vehicle at the end of the lease, used to determine the cost of the lease at the time of negotiation.</p>
+</td></tr></table>
+
+<form name="mmyForm" action="index.jsp" method="get">
+<table border="0" cellspacing="0" cellpadding="4" id="algform">
+<tr><td width="5" rowspan="3">&nbsp;</td>
+<td colspan="3" valign="bottom" height="35"><h2>Select a vehicle to obtain its residual value</h2></td></tr>
+<tr valign="top">
+<td width="120" height="50"><div style="font-weight:bold;padding-bottom:3px">Make:</div>
+<select name="makename" class="makename" onchange="populateModels(this.options[this.selectedIndex].value)">
+<option>
+</select></td>
+<td width="240"><div style="font-weight:bold;padding-bottom:3px">Model:</div>
+<select name="modelname" class="modelname" onchange="populateYears(this.options[this.selectedIndex].value)">
+<option>
+</select></td>
+<td><div style="font-weight:bold;padding-bottom:3px">Year:</div>
+<select name="year" class="year">
+<option>
+</select></td>
+</tr>
+<tr valign="top"><td colspan="3" height="38">
+<div class="BttnPill"><span class="bttntxt">
+			<a href="#" onClick="document.mmyForm.submit();">Search for Values</a></span><span class="bttncap"></span></div>
+</td></tr>
+</table>
+</form>
+
+<script language="JavaScript">
+populateMakes();
+populateModels(document.mmyForm.makename.options[document.mmyForm.makename.selectedIndex].value);
+preSelect();
+</script>
+
+
+    
+    
+    
+
+
+
+
+
+
+
+
+
+    
+    
+
+
+
+
+
+
+
+
+
+    
+    
+    
+
+
+
+
+
+
+
+<br />
+<div class="mmyheader">2016&nbsp;Hyundai&nbsp;ACCENT&nbsp;</div>
+
+    
+    
+    
+    
+    <table cellspacing="0" cellpadding="5" width="500" class="algresults">
+<tr><td colspan=5 class="header">4dr Sdn GLS MT</td></tr>
+<tr class="seeMoreRow"><td colspan=5><a class="seeMore" href="#">See More</a></td></tr>
+
+
+<tr class="trimDetail"><td>&nbsp;</td>
+	<td><b>24 months</b></td>
+	<td><b>36 months</b></td>
+	<td><b>48 months</b></td>
+	<td><b>60 months</b></td>
+</tr>
+
+<tr class="trimDetail">
+<td><b>MSRP</b></td>
+<td>$15,887&nbsp;</td>
+<td>$15,887&nbsp;</td>
+<td>$15,887&nbsp;</td>
+<td>$15,887&nbsp;</td>
+</tr>
+
+<tr class="trimDetail">
+<td><b>ALG Residual %</b></td>
+<td>58&nbsp;</td>
+<td>47&nbsp;</td>
+<td>39&nbsp;</td>
+<td>32&nbsp;</td>
+</tr>
+
+<tr class="trimDetail">
+<td><b>ALG Residual Value</b></td>
+<td>$9,200&nbsp;</td>
+<td>$7,450&nbsp;</td>
+<td>$6,250&nbsp;</td>
+<td>$5,025&nbsp;</td>
+</tr>
+
+
+<tr class="trimDetail">
+<td><b>Money Factor</b></td>
+<td>0.002868167&nbsp;</td>
+<td>0.0029915&nbsp;</td>
+<td>0.003015833&nbsp;</td>
+<td>0.003092333&nbsp;</td>
+</tr>
+
+
+<tr class="trimDetail">
+<td><b>Payments</b></td>
+<td><a href="javascript:fillResidualValue(9200,15887,0.002868167,24);">Calculate</a></td>
+<td><a href="javascript:fillResidualValue(7450,15887,0.0029915,36);">Calculate</a></td>
+<td><a href="javascript:fillResidualValue(6250,15887,0.003015833,48);">Calculate</a></td>
+<td><a href="javascript:fillResidualValue(5025,15887,0.003092333,60);">Calculate</a></td>
+</tr>
+
+</table><br>
+
+    
+    
+    
+    
+    <table cellspacing="0" cellpadding="5" width="500" class="algresults">
+<tr><td colspan=5 class="header">4dr Sdn GLS AT</td></tr>
+<tr class="seeMoreRow"><td colspan=5><a class="seeMore" href="#">See More</a></td></tr>
+
+
+<tr class="trimDetail"><td>&nbsp;</td>
+	<td><b>24 months</b></td>
+	<td><b>36 months</b></td>
+	<td><b>48 months</b></td>
+	<td><b>60 months</b></td>
+</tr>
+
+<tr class="trimDetail">
+<td><b>MSRP</b></td>
+<td>$16,908&nbsp;</td>
+<td>$16,908&nbsp;</td>
+<td>$16,908&nbsp;</td>
+<td>$16,908&nbsp;</td>
+</tr>
+
+<tr class="trimDetail">
+<td><b>ALG Residual %</b></td>
+<td>57&nbsp;</td>
+<td>48&nbsp;</td>
+<td>40&nbsp;</td>
+<td>32&nbsp;</td>
+</tr>
+
+<tr class="trimDetail">
+<td><b>ALG Residual Value</b></td>
+<td>$9,825&nbsp;</td>
+<td>$8,250&nbsp;</td>
+<td>$6,925&nbsp;</td>
+<td>$5,575&nbsp;</td>
+</tr>
+
+
+<tr class="trimDetail">
+<td><b>Money Factor</b></td>
+<td>0.002868167&nbsp;</td>
+<td>0.0029915&nbsp;</td>
+<td>0.003015833&nbsp;</td>
+<td>0.003092333&nbsp;</td>
+</tr>
+
+
+<tr class="trimDetail">
+<td><b>Payments</b></td>
+<td><a href="javascript:fillResidualValue(9825,16908,0.002868167,24);">Calculate</a></td>
+<td><a href="javascript:fillResidualValue(8250,16908,0.0029915,36);">Calculate</a></td>
+<td><a href="javascript:fillResidualValue(6925,16908,0.003015833,48);">Calculate</a></td>
+<td><a href="javascript:fillResidualValue(5575,16908,0.003092333,60);">Calculate</a></td>
+</tr>
+
+</table><br>
+
+    
+    
+    
+    
+    <table cellspacing="0" cellpadding="5" width="500" class="algresults">
+<tr><td colspan=5 class="header">5dr HB GS MT</td></tr>
+<tr class="seeMoreRow"><td colspan=5><a class="seeMore" href="#">See More</a></td></tr>
+
+
+<tr class="trimDetail"><td>&nbsp;</td>
+	<td><b>24 months</b></td>
+	<td><b>36 months</b></td>
+	<td><b>48 months</b></td>
+	<td><b>60 months</b></td>
+</tr>
+
+<tr class="trimDetail">
+<td><b>MSRP</b></td>
+<td>$16,142&nbsp;</td>
+<td>$16,142&nbsp;</td>
+<td>$16,142&nbsp;</td>
+<td>$16,142&nbsp;</td>
+</tr>
+
+<tr class="trimDetail">
+<td><b>ALG Residual %</b></td>
+<td>58&nbsp;</td>
+<td>47&nbsp;</td>
+<td>40&nbsp;</td>
+<td>32&nbsp;</td>
+</tr>
+
+<tr class="trimDetail">
+<td><b>ALG Residual Value</b></td>
+<td>$9,350&nbsp;</td>
+<td>$7,625&nbsp;</td>
+<td>$6,400&nbsp;</td>
+<td>$5,150&nbsp;</td>
+</tr>
+
+
+<tr class="trimDetail">
+<td><b>Money Factor</b></td>
+<td>0.002868167&nbsp;</td>
+<td>0.0029915&nbsp;</td>
+<td>0.003015833&nbsp;</td>
+<td>0.003092333&nbsp;</td>
+</tr>
+
+
+<tr class="trimDetail">
+<td><b>Payments</b></td>
+<td><a href="javascript:fillResidualValue(9350,16142,0.002868167,24);">Calculate</a></td>
+<td><a href="javascript:fillResidualValue(7625,16142,0.0029915,36);">Calculate</a></td>
+<td><a href="javascript:fillResidualValue(6400,16142,0.003015833,48);">Calculate</a></td>
+<td><a href="javascript:fillResidualValue(5150,16142,0.003092333,60);">Calculate</a></td>
+</tr>
+
+</table><br>
+
+    
+    
+    
+    
+    <table cellspacing="0" cellpadding="5" width="500" class="algresults">
+<tr><td colspan=5 class="header">5dr HB GS AT</td></tr>
+<tr class="seeMoreRow"><td colspan=5><a class="seeMore" href="#">See More</a></td></tr>
+
+
+<tr class="trimDetail"><td>&nbsp;</td>
+	<td><b>24 months</b></td>
+	<td><b>36 months</b></td>
+	<td><b>48 months</b></td>
+	<td><b>60 months</b></td>
+</tr>
+
+<tr class="trimDetail">
+<td><b>MSRP</b></td>
+<td>$17,367&nbsp;</td>
+<td>$17,367&nbsp;</td>
+<td>$17,367&nbsp;</td>
+<td>$17,367&nbsp;</td>
+</tr>
+
+<tr class="trimDetail">
+<td><b>ALG Residual %</b></td>
+<td>58&nbsp;</td>
+<td>50&nbsp;</td>
+<td>42&nbsp;</td>
+<td>34&nbsp;</td>
+</tr>
+
+<tr class="trimDetail">
+<td><b>ALG Residual Value</b></td>
+<td>$10,075&nbsp;</td>
+<td>$8,650&nbsp;</td>
+<td>$7,275&nbsp;</td>
+<td>$5,850&nbsp;</td>
+</tr>
+
+
+<tr class="trimDetail">
+<td><b>Money Factor</b></td>
+<td>0.002868167&nbsp;</td>
+<td>0.0029915&nbsp;</td>
+<td>0.003015833&nbsp;</td>
+<td>0.003092333&nbsp;</td>
+</tr>
+
+
+<tr class="trimDetail">
+<td><b>Payments</b></td>
+<td><a href="javascript:fillResidualValue(10075,17367,0.002868167,24);">Calculate</a></td>
+<td><a href="javascript:fillResidualValue(8650,17367,0.0029915,36);">Calculate</a></td>
+<td><a href="javascript:fillResidualValue(7275,17367,0.003015833,48);">Calculate</a></td>
+<td><a href="javascript:fillResidualValue(5850,17367,0.003092333,60);">Calculate</a></td>
+</tr>
+
+</table><br>
+
+    
+    
+    
+    
+    <table cellspacing="0" cellpadding="5" width="500" class="algresults">
+<tr><td colspan=5 class="header">5dr HB Sport MT</td></tr>
+<tr class="seeMoreRow"><td colspan=5><a class="seeMore" href="#">See More</a></td></tr>
+
+
+<tr class="trimDetail"><td>&nbsp;</td>
+	<td><b>24 months</b></td>
+	<td><b>36 months</b></td>
+	<td><b>48 months</b></td>
+	<td><b>60 months</b></td>
+</tr>
+
+<tr class="trimDetail">
+<td><b>MSRP</b></td>
+<td>$17,673&nbsp;</td>
+<td>$17,673&nbsp;</td>
+<td>$17,673&nbsp;</td>
+<td>$17,673&nbsp;</td>
+</tr>
+
+<tr class="trimDetail">
+<td><b>ALG Residual %</b></td>
+<td>58&nbsp;</td>
+<td>49&nbsp;</td>
+<td>41&nbsp;</td>
+<td>33&nbsp;</td>
+</tr>
+
+<tr class="trimDetail">
+<td><b>ALG Residual Value</b></td>
+<td>$10,275&nbsp;</td>
+<td>$8,700&nbsp;</td>
+<td>$7,300&nbsp;</td>
+<td>$5,875&nbsp;</td>
+</tr>
+
+
+<tr class="trimDetail">
+<td><b>Money Factor</b></td>
+<td>0.002868167&nbsp;</td>
+<td>0.0029915&nbsp;</td>
+<td>0.003015833&nbsp;</td>
+<td>0.003092333&nbsp;</td>
+</tr>
+
+
+<tr class="trimDetail">
+<td><b>Payments</b></td>
+<td><a href="javascript:fillResidualValue(10275,17673,0.002868167,24);">Calculate</a></td>
+<td><a href="javascript:fillResidualValue(8700,17673,0.0029915,36);">Calculate</a></td>
+<td><a href="javascript:fillResidualValue(7300,17673,0.003015833,48);">Calculate</a></td>
+<td><a href="javascript:fillResidualValue(5875,17673,0.003092333,60);">Calculate</a></td>
+</tr>
+
+</table><br>
+
+    
+    
+    
+    
+    <table cellspacing="0" cellpadding="5" width="500" class="algresults">
+<tr><td colspan=5 class="header">5dr HB Sport AT</td></tr>
+<tr class="seeMoreRow"><td colspan=5><a class="seeMore" href="#">See More</a></td></tr>
+
+
+<tr class="trimDetail"><td>&nbsp;</td>
+	<td><b>24 months</b></td>
+	<td><b>36 months</b></td>
+	<td><b>48 months</b></td>
+	<td><b>60 months</b></td>
+</tr>
+
+<tr class="trimDetail">
+<td><b>MSRP</b></td>
+<td>$18,693&nbsp;</td>
+<td>$18,693&nbsp;</td>
+<td>$18,693&nbsp;</td>
+<td>$18,693&nbsp;</td>
+</tr>
+
+<tr class="trimDetail">
+<td><b>ALG Residual %</b></td>
+<td>58&nbsp;</td>
+<td>50&nbsp;</td>
+<td>42&nbsp;</td>
+<td>34&nbsp;</td>
+</tr>
+
+<tr class="trimDetail">
+<td><b>ALG Residual Value</b></td>
+<td>$10,900&nbsp;</td>
+<td>$9,500&nbsp;</td>
+<td>$7,975&nbsp;</td>
+<td>$6,425&nbsp;</td>
+</tr>
+
+
+<tr class="trimDetail">
+<td><b>Money Factor</b></td>
+<td>0.002868167&nbsp;</td>
+<td>0.0029915&nbsp;</td>
+<td>0.003015833&nbsp;</td>
+<td>0.003092333&nbsp;</td>
+</tr>
+
+
+<tr class="trimDetail">
+<td><b>Payments</b></td>
+<td><a href="javascript:fillResidualValue(10900,18693,0.002868167,24);">Calculate</a></td>
+<td><a href="javascript:fillResidualValue(9500,18693,0.0029915,36);">Calculate</a></td>
+<td><a href="javascript:fillResidualValue(7975,18693,0.003015833,48);">Calculate</a></td>
+<td><a href="javascript:fillResidualValue(6425,18693,0.003092333,60);">Calculate</a></td>
+</tr>
+
+</table><br>
+
+    
+    
+    
+    
+    <table cellspacing="0" cellpadding="5" width="500" class="algresults">
+<tr><td colspan=5 class="header">AlloyWhl|acdef</td></tr>
+<tr class="seeMoreRow"><td colspan=5><a class="seeMore" href="#">See More</a></td></tr>
+
+
+<tr class="trimDetail"><td>&nbsp;</td>
+	<td><b>24 months</b></td>
+	<td><b>36 months</b></td>
+	<td><b>48 months</b></td>
+	<td><b>60 months</b></td>
+</tr>
+
+<tr class="trimDetail">
+<td><b>MSRP</b></td>
+<td>$500&nbsp;</td>
+<td>$500&nbsp;</td>
+<td>$500&nbsp;</td>
+<td>$500&nbsp;</td>
+</tr>
+
+<tr class="trimDetail">
+<td><b>ALG Residual %</b></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr class="trimDetail">
+<td><b>ALG Residual Value</b></td>
+<td>$350&nbsp;</td>
+<td>$275&nbsp;</td>
+<td>$225&nbsp;</td>
+<td>$175&nbsp;</td>
+</tr>
+
+
+<tr class="trimDetail">
+<td><b>Money Factor</b></td>
+<td>0.002868167&nbsp;</td>
+<td>0.0029915&nbsp;</td>
+<td>0.003015833&nbsp;</td>
+<td>0.003092333&nbsp;</td>
+</tr>
+
+
+<tr class="trimDetail">
+<td><b>Payments</b></td>
+<td><a href="javascript:fillResidualValue(350,500,0.002868167,24);">Calculate</a></td>
+<td><a href="javascript:fillResidualValue(275,500,0.0029915,36);">Calculate</a></td>
+<td><a href="javascript:fillResidualValue(225,500,0.003015833,48);">Calculate</a></td>
+<td><a href="javascript:fillResidualValue(175,500,0.003092333,60);">Calculate</a></td>
+</tr>
+
+</table><br>
+
+    
+    
+    
+    
+    <table cellspacing="0" cellpadding="5" width="500" class="algresults">
+<tr><td colspan=5 class="header">Cruise|acdef</td></tr>
+<tr class="seeMoreRow"><td colspan=5><a class="seeMore" href="#">See More</a></td></tr>
+
+
+<tr class="trimDetail"><td>&nbsp;</td>
+	<td><b>24 months</b></td>
+	<td><b>36 months</b></td>
+	<td><b>48 months</b></td>
+	<td><b>60 months</b></td>
+</tr>
+
+<tr class="trimDetail">
+<td><b>MSRP</b></td>
+<td>$250&nbsp;</td>
+<td>$250&nbsp;</td>
+<td>$250&nbsp;</td>
+<td>$250&nbsp;</td>
+</tr>
+
+<tr class="trimDetail">
+<td><b>ALG Residual %</b></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr class="trimDetail">
+<td><b>ALG Residual Value</b></td>
+<td>$225&nbsp;</td>
+<td>$200&nbsp;</td>
+<td>$175&nbsp;</td>
+<td>$150&nbsp;</td>
+</tr>
+
+
+<tr class="trimDetail">
+<td><b>Money Factor</b></td>
+<td>0.002868167&nbsp;</td>
+<td>0.0029915&nbsp;</td>
+<td>0.003015833&nbsp;</td>
+<td>0.003092333&nbsp;</td>
+</tr>
+
+
+<tr class="trimDetail">
+<td><b>Payments</b></td>
+<td><a href="javascript:fillResidualValue(225,250,0.002868167,24);">Calculate</a></td>
+<td><a href="javascript:fillResidualValue(200,250,0.0029915,36);">Calculate</a></td>
+<td><a href="javascript:fillResidualValue(175,250,0.003015833,48);">Calculate</a></td>
+<td><a href="javascript:fillResidualValue(150,250,0.003092333,60);">Calculate</a></td>
+</tr>
+
+</table><br>
+
+    
+    
+    
+    
+    <table cellspacing="0" cellpadding="5" width="500" class="algresults">
+<tr><td colspan=5 class="header">Moonroof|abcde</td></tr>
+<tr class="seeMoreRow"><td colspan=5><a class="seeMore" href="#">See More</a></td></tr>
+
+
+<tr class="trimDetail"><td>&nbsp;</td>
+	<td><b>24 months</b></td>
+	<td><b>36 months</b></td>
+	<td><b>48 months</b></td>
+	<td><b>60 months</b></td>
+</tr>
+
+<tr class="trimDetail">
+<td><b>MSRP</b></td>
+<td>$850&nbsp;</td>
+<td>$850&nbsp;</td>
+<td>$850&nbsp;</td>
+<td>$850&nbsp;</td>
+</tr>
+
+<tr class="trimDetail">
+<td><b>ALG Residual %</b></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr class="trimDetail">
+<td><b>ALG Residual Value</b></td>
+<td>$575&nbsp;</td>
+<td>$500&nbsp;</td>
+<td>$425&nbsp;</td>
+<td>$350&nbsp;</td>
+</tr>
+
+
+<tr class="trimDetail">
+<td><b>Money Factor</b></td>
+<td>0.002868167&nbsp;</td>
+<td>0.0029915&nbsp;</td>
+<td>0.003015833&nbsp;</td>
+<td>0.003092333&nbsp;</td>
+</tr>
+
+
+<tr class="trimDetail">
+<td><b>Payments</b></td>
+<td><a href="javascript:fillResidualValue(575,850,0.002868167,24);">Calculate</a></td>
+<td><a href="javascript:fillResidualValue(500,850,0.0029915,36);">Calculate</a></td>
+<td><a href="javascript:fillResidualValue(425,850,0.003015833,48);">Calculate</a></td>
+<td><a href="javascript:fillResidualValue(350,850,0.003092333,60);">Calculate</a></td>
+</tr>
+
+</table><br>
+
+
+<p>Data supplied by <a href="http://www.alg.com" target="_blank">ALG</a></p>
+
+
+<p class="cpgray">Money factor is not an annual percentage rate. In a lease, the lease company uses the "money factor" &mdash; an arbitrary fractional number, such as .0042 — to calculate the lease charge or fee. The monthly payment combines the resulting fee with the depreciation charge (the total value the car loses over the term of the lease divided by the number of monthly payments). To better understand the money factor, multiply it by 2,400 to arrive at a more typical APR; this calculation will be slightly above the equivalent APR that the money factor represents. This percentage is more useful in comparing leases with each other than with loans, however, because it doesn’t account for all fees and only loans build equity. For example, a rate of 9.84% [.0041 x 2,400] on a lease, while lower, is not necessarily a better deal than a 10.4% APR on a loan, all other factors being equal.</p><br><br>
+
+
+
+
+
+<script type="text/javascript" src="/js/lib/jquery/1_3_2/jquery.min.js"></script>
+<script type="text/javascript">
+
+/************
+scripts for the controller go here
+
+trigger
+a.seeMore {trigger event!}
+
+event {show the corresponding trim box}
+
+**************/
+
+$('a.seeMore').click(function() {
+	/*$('table.algresults tr.trimDetail').css('display','none').siblings('.seeMoreRow').css('display','table-row');
+	$(this).parents('tr').css('display','none').siblings('.trimDetail').css('display','table-row').parents('table.algresults').css('display','table');
+	return false;*/
+	
+	$('table.algresults tr.trimDetail').toggle(false).siblings('.seeMoreRow').toggle(true);
+	$(this).parents('tr').toggle(false).siblings('.trimDetail').toggle(true).parents('table.algresults').toggle(true);
+	return false;
+	
+});
+
+</script>
+
+
+
+
+
+
+
+
+
+
+<script language="JavaScript" type="text/javascript">
+var isnet = false;
+if(!isnet){
+var browserName=navigator.appName; 
+if (browserName=="Netscape"){isnet=true;}
+else 
+{if (browserName=="Microsoft Internet Explorer"){isie=true;}else{isunsub=true;}}
+}
+
+function specialReload(mode){
+var langRandomizer = Math.floor(Math.random()*10000);
+var newUrl = document.location.href;
+if(mode==1){newUrl = newUrl.replace("request_locale=es", "request_locale=en");}
+if(mode==2){newUrl = newUrl.replace("request_locale=en", "request_locale=es");}
+if(newUrl.indexOf('?')>0 && isnet){newUrl = newUrl.replace('?', '?lr=' +langRandomizer + '&');}
+
+if(window.location.href == newUrl){window.location.reload();} else {
+
+window.location.href = newUrl;
+}
+
+}
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- SiteCatalyst code: http://www.omniture.com -->
+<script type="text/javascript" src="/js/omniture/s_code.js"></script>
+<script type="text/javascript">
+eVarArrayString = "";
+s_clven.pageName="index.jsp";
+
+s_clven.pageName = "go/alg/"+ s_clven.pageName;
+
+s_clven.server="";
+
+s_clven.channel="";
+if(s_clven.pageName.indexOf("/Search/") > -1) {
+  if (s_clven.pageName.indexOf("Blended") > -1) { s_clven.channel="Blended Cars/Search"; }
+  else if(s_clven.pageName.indexOf("New") > -1 && s_clven.pageName.indexOf("Used") < 0 ){s_clven.channel="New Cars/Search";} else {s_clven.channel="Used Cars/Search";}
+}
+if (window.location.pathname == '/') { s_clven.channel = 'go'; } // force homepage channel
+if(s_clven.channel.indexOf('/') == 0) { /* remove starting slash */
+  s_clven.channel = s_clven.channel.slice(1);
+}
+
+
+var QueryString = function () {
+  // This function is anonymous, is executed immediately and 
+  // the return value is assigned to QueryString!
+  var query_string = {};
+  var query = window.location.search.substring(1);
+  var vars = query.split("&");
+  for (var i=0;i<vars.length;i++) {
+    var pair = vars[i].split("=");
+    	// If first entry with this name
+    if (typeof query_string[pair[0]] === "undefined") {
+      query_string[pair[0]] = pair[1];
+    	// If second entry with this name
+    } else if (typeof query_string[pair[0]] === "string") {
+      var arr = [ query_string[pair[0]], pair[1] ];
+      query_string[pair[0]] = arr;
+    	// If third or later entry with this name
+    } else {
+      query_string[pair[0]].push(pair[1]);
+    }
+  } 
+    return query_string;
+} ();
+
+s_clven.pageType="";
+s_clven.prop1="";
+s_clven.prop2="";
+s_clven.prop3="";
+s_clven.prop4="";
+s_clven.prop5="";
+s_clven.prop6="chitrib";
+s_clven.prop7="";
+s_clven.prop8="";
+s_clven.prop9="";
+if (QueryString.prMx) { s_clven.prop9 = QueryString.prMx;}
+s_clven.prop10="";
+s_clven.prop11="";
+s_clven.prop12="Hyundai";
+s_clven.prop13="ACCENT";
+s_clven.prop14="2016";
+
+s_clven.prop24=""; 
+if (!s_clven.prop24 && QueryString.rd) { s_clven.prop24 = QueryString.rd } else { try { s_clven.prop24 = JSON.parse(localStorage.getItem('search-widget-values'))['radius']; } catch(e) {} }
+
+s_clven.prop51="";
+
+
+
+/* ivt test */
+if (s_clven.pageName === 'go/search/compare' && typeof compareCount !== 'undefined') {
+  s_clven.prop65=compareCount;
+}
+s_clven.prop18 = "chitrib";
+if (window.criteriaObject && criteriaObject.sf1Nm && criteriaObject.sf1Dir) { s_clven.prop20 = criteriaObject.sf1Nm.toLowerCase() + '-' + criteriaObject.sf1Dir.toLowerCase(); }
+if (window.criteriaObject && criteriaObject.rd) { s_clven.prop52 = criteriaObject.rd; }
+s_clven.prop23=s_clven.prop6+"-"+s_clven.pageName;
+/* E-commerce Variables */
+s_clven.campaign="";
+s_clven.state="";
+s_clven.zip="";
+s_clven.events="";
+
+if(document.forms.namedItem('leadForm') || document.forms.namedItem('quoteForm')){
+s_clven.events=s_clven.apl(s_clven.events,'',',');
+s_clven.eVar6="";
+}
+
+
+s_clven.products="";
+s_clven.purchaseID="";
+s_clven.eVar1="";
+s_clven.eVar2="";
+s_clven.eVar3="";
+s_clven.eVar4="";
+s_clven.eVar5="";
+s_clven.eVar26=""; 
+s_clven.eVar27=""; 
+s_clven.eVar33=""; 
+s_clven.eVar54=""; 
+s_clven.eVar60=""; 
+s_clven.eVar61=""; 
+s_clven.eVar62=""; 
+ 
+
+ 
+
+s_clven.eVar71="";
+s_clven.eVar72 = window.eVar72 || ''; 
+
+
+if(eVarArrayString.length > 0){
+allEvars2Set = eVarArrayString.split("|");
+
+for(ev=0;ev<allEvars2Set.length;ev++){
+
+nmKy = allEvars2Set[ev].split("~");
+eval("s_clven.eVar"+nmKy[0]+"=\""+nmKy[1]+"\"");
+}
+}
+
+
+    var optimizely = optimizely || [];
+    optimizely.push(["sc_svar", s_clven]);
+    optimizely.push("sc_activate");
+
+
+
+
+
+// overrides for page-over-page prop, evar, event & listvar tracking
+
+(function() {
+  if (window.CARSBRIDGE.getOmnitureBridgeValue('props')) {
+    var o = window.CARSBRIDGE.getOmnitureBridgeValue('props');  
+    for (var k in o) {
+      s_clven[k] = o[k];
+    }
+    window.CARSBRIDGE.setOmnitureBridgeValue('props','');
+  } 
+
+  if (window.CARSBRIDGE.getOmnitureBridgeValue('evars')) {
+    var o = window.CARSBRIDGE.getOmnitureBridgeValue('evars');  
+    for (var k in o) {
+      s_clven[k] = o[k];
+    }
+    window.CARSBRIDGE.setOmnitureBridgeValue('evars','');
+  }
+
+  if (window.CARSBRIDGE.getOmnitureBridgeValue('events')) {
+    var o = window.CARSBRIDGE.getOmnitureBridgeValue('events');
+    // events is a comma-delimited string, so be careful about additions
+    if (s_clven.events) {
+      s_clven.events = s_clven.events + "," + o;  
+    } else {
+      s_clven.events = o;
+    }
+    window.CARSBRIDGE.setOmnitureBridgeValue('events','');
+  }
+
+  if (window.CARSBRIDGE.getOmnitureBridgeValue('listvars')) {
+    var o = window.CARSBRIDGE.getOmnitureBridgeValue('listvars');
+    for (var k in o) {
+      s_clven['list' + k] = o[k];
+    }
+    window.CARSBRIDGE.setOmnitureBridgeValue('listvars','');
+  }
+
+})();
+
+/************* DO NOT ALTER ANYTHING BELOW THIS LINE ! **************/
+var s_code=s_clven.t();if(s_code)document.write(s_code);document.close();
+</script>
+<!-- End SiteCatalyst code version: H.11. -->
+
+<script type="text/javascript" src="/js/lib/carscom/analytics.js"></script>
+<script type="text/javascript" src="/js/lib/carscom/omnitureAnalyticsImpl.js"></script>
+<script type="text/javascript">carscom.analytics.tracker = carscom.analytics.OmnitureFactory();</script>
+<script type="text/javascript">
+function _hbSet(){}; function _hbSend(){}; function _hbLink(){};
+</script>
+
+
+
+
+<script type="text/javascript" src="/js/cars/bidiq.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+
+
+
+  
+
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+
+<!-- 5 -->
+
+
+
+
+				
+
+
+
+
+
+	
+
+
+
+	
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  
+  
+
+
+  
+  
+  
+
+  
+   
+
+  
+  
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+  
+  
+
+
+  
+
+  
+  
+
+  
+	
+  
+  
+
+
+  
+
+
+
+
+
+ 
+ 
+ 
+ 
+ 
+  
+  
+  
+ 
+ 
+ 
+  
+  
+  
+  
+
+
+
+
+ 
+
+
+	
+	
+	  
+		
+		 
+
+
+	
+	
+	
+
+
+
+
+
+<script type="text/javascript">
+  var si_expiry = new Date();
+  si_expiry.setTime(si_expiry.getTime()+7200000); 
+  document.cookie = 'adCatInfo=||wagonhatchback_hatchback;expires='+si_expiry.toGMTString()+'; path=/';
+</script>
+
+
+	
+
+
+
+
+
+
+<script type="text/javascript" src="/js/cars/catRetargeting.js"></script>
+<script type="text/javascript">CARS.adProducts.retarget.decodeCat("wagonhatchback_hatchback");</script>
+
+
+
+ 
+	
+	
+	
+ 
+
+
+
+
+<script>btData = {"category":"wagonhatchback_hatchback","make":"hyundai","model":"accent","mdid":"","year":"2016","stock":"","price":"","miles":"","dlid":"","listing":"","zip":"","lzone":"","aff":"chitrib","section":"cdn.cars.other/default","intent":"n","lang":"en"}</script>
+<script src="//s.btstatic.com/tag.js">{ site: "4IGCP5L" }</script>
+<noscript><iframe src="//s.thebrighttag.com/iframe?c=4IGCP5L" width="1" height="1" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe></noscript>
+
+
+<script type="text/javascript" src="http://vcu.collserve.com/vcu.js"></script>
+</body>
+</html>
+
+
+from scrapy import Selector
+doc = """
+"""
+
+sel = Selector(text=doc, type="html")
+
+sel.xpath('//li//@href').extract()
+[u'link1.html', u'link2.html', u'link3.html', u'link4.html', u'link5.html']
+
+sel.xpath('//li[re:test(@class, "item-\d$")]//@href').extract()
+[u'link1.html', u'link2.html', u'link4.html', u'link5.html']
+
+
+
+sel.xpath('//tr/td').extract()
+
+sel.xpath('//tr/td').extract()
+
+
+<tr><td colspan=5 class="header">4dr Sdn GLS MT</td></tr>
+
+sel.xpath('//tr/td[@colspan=5]/text()').extract()
+[u'4dr Sdn GLS MT', u'4dr Sdn GLS AT', u'5dr HB GS MT', u'5dr HB GS AT', u'5dr HB Sport MT', u'5dr HB Sport AT', u'AlloyWhl|acdef', u'Cruise|acdef', u'Moonroof|abcde']
+
+
+sel.xpath('//table[@class="algresults"]/tr').extract()
+[u'<tr><td colspan="5" class="header">4dr Sdn GLS MT</td></tr>', u'<tr class="seeMoreRow"><td colspan="5"><a class="seeMore" href="#">See More</a></td></tr>', u'<tr class="trimDetail"><td>\xa0</td>\n    <td><b>24 months</b></td>\n    <td><b>36 months</b></td>\n    <td><b>48 months</b></td>\n    <td><b>60 months</b></td>\n</tr>', u'<tr class="trimDetail">\n<td><b>MSRP</b></td>\n<td>$15,887\xa0</td>\n<td>$15,887\xa0</td>\n<td>$15,887\xa0</td>\n<td>$15,887\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>ALG Residual %</b></td>\n<td>58\xa0</td>\n<td>47\xa0</td>\n<td>39\xa0</td>\n<td>32\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>ALG Residual Value</b></td>\n<td>$9,200\xa0</td>\n<td>$7,450\xa0</td>\n<td>$6,250\xa0</td>\n<td>$5,025\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>Money Factor</b></td>\n<td>0.002868167\xa0</td>\n<td>0.0029915\xa0</td>\n<td>0.003015833\xa0</td>\n<td>0.003092333\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>Payments</b></td>\n<td><a href="javascript:fillResidualValue(9200,15887,0.002868167,24);">Calculate</a></td>\n<td><a href="javascript:fillResidualValue(7450,15887,0.0029915,36);">Calculate</a></td>\n<td><a href="javascript:fillResidualValue(6250,15887,0.003015833,48);">Calculate</a></td>\n<td><a href="javascript:fillResidualValue(5025,15887,0.003092333,60);">Calculate</a></td>\n</tr>', u'<tr><td colspan="5" class="header">4dr Sdn GLS AT</td></tr>', u'<tr class="seeMoreRow"><td colspan="5"><a class="seeMore" href="#">See More</a></td></tr>', u'<tr class="trimDetail"><td>\xa0</td>\n    <td><b>24 months</b></td>\n    <td><b>36 months</b></td>\n    <td><b>48 months</b></td>\n    <td><b>60 months</b></td>\n</tr>', u'<tr class="trimDetail">\n<td><b>MSRP</b></td>\n<td>$16,908\xa0</td>\n<td>$16,908\xa0</td>\n<td>$16,908\xa0</td>\n<td>$16,908\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>ALG Residual %</b></td>\n<td>57\xa0</td>\n<td>48\xa0</td>\n<td>40\xa0</td>\n<td>32\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>ALG Residual Value</b></td>\n<td>$9,825\xa0</td>\n<td>$8,250\xa0</td>\n<td>$6,925\xa0</td>\n<td>$5,575\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>Money Factor</b></td>\n<td>0.002868167\xa0</td>\n<td>0.0029915\xa0</td>\n<td>0.003015833\xa0</td>\n<td>0.003092333\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>Payments</b></td>\n<td><a href="javascript:fillResidualValue(9825,16908,0.002868167,24);">Calculate</a></td>\n<td><a href="javascript:fillResidualValue(8250,16908,0.0029915,36);">Calculate</a></td>\n<td><a href="javascript:fillResidualValue(6925,16908,0.003015833,48);">Calculate</a></td>\n<td><a href="javascript:fillResidualValue(5575,16908,0.003092333,60);">Calculate</a></td>\n</tr>', u'<tr><td colspan="5" class="header">5dr HB GS MT</td></tr>', u'<tr class="seeMoreRow"><td colspan="5"><a class="seeMore" href="#">See More</a></td></tr>', u'<tr class="trimDetail"><td>\xa0</td>\n    <td><b>24 months</b></td>\n    <td><b>36 months</b></td>\n    <td><b>48 months</b></td>\n    <td><b>60 months</b></td>\n</tr>', u'<tr class="trimDetail">\n<td><b>MSRP</b></td>\n<td>$16,142\xa0</td>\n<td>$16,142\xa0</td>\n<td>$16,142\xa0</td>\n<td>$16,142\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>ALG Residual %</b></td>\n<td>58\xa0</td>\n<td>47\xa0</td>\n<td>40\xa0</td>\n<td>32\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>ALG Residual Value</b></td>\n<td>$9,350\xa0</td>\n<td>$7,625\xa0</td>\n<td>$6,400\xa0</td>\n<td>$5,150\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>Money Factor</b></td>\n<td>0.002868167\xa0</td>\n<td>0.0029915\xa0</td>\n<td>0.003015833\xa0</td>\n<td>0.003092333\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>Payments</b></td>\n<td><a href="javascript:fillResidualValue(9350,16142,0.002868167,24);">Calculate</a></td>\n<td><a href="javascript:fillResidualValue(7625,16142,0.0029915,36);">Calculate</a></td>\n<td><a href="javascript:fillResidualValue(6400,16142,0.003015833,48);">Calculate</a></td>\n<td><a href="javascript:fillResidualValue(5150,16142,0.003092333,60);">Calculate</a></td>\n</tr>', u'<tr><td colspan="5" class="header">5dr HB GS AT</td></tr>', u'<tr class="seeMoreRow"><td colspan="5"><a class="seeMore" href="#">See More</a></td></tr>', u'<tr class="trimDetail"><td>\xa0</td>\n    <td><b>24 months</b></td>\n    <td><b>36 months</b></td>\n    <td><b>48 months</b></td>\n    <td><b>60 months</b></td>\n</tr>', u'<tr class="trimDetail">\n<td><b>MSRP</b></td>\n<td>$17,367\xa0</td>\n<td>$17,367\xa0</td>\n<td>$17,367\xa0</td>\n<td>$17,367\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>ALG Residual %</b></td>\n<td>58\xa0</td>\n<td>50\xa0</td>\n<td>42\xa0</td>\n<td>34\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>ALG Residual Value</b></td>\n<td>$10,075\xa0</td>\n<td>$8,650\xa0</td>\n<td>$7,275\xa0</td>\n<td>$5,850\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>Money Factor</b></td>\n<td>0.002868167\xa0</td>\n<td>0.0029915\xa0</td>\n<td>0.003015833\xa0</td>\n<td>0.003092333\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>Payments</b></td>\n<td><a href="javascript:fillResidualValue(10075,17367,0.002868167,24);">Calculate</a></td>\n<td><a href="javascript:fillResidualValue(8650,17367,0.0029915,36);">Calculate</a></td>\n<td><a href="javascript:fillResidualValue(7275,17367,0.003015833,48);">Calculate</a></td>\n<td><a href="javascript:fillResidualValue(5850,17367,0.003092333,60);">Calculate</a></td>\n</tr>', u'<tr><td colspan="5" class="header">5dr HB Sport MT</td></tr>', u'<tr class="seeMoreRow"><td colspan="5"><a class="seeMore" href="#">See More</a></td></tr>', u'<tr class="trimDetail"><td>\xa0</td>\n    <td><b>24 months</b></td>\n    <td><b>36 months</b></td>\n    <td><b>48 months</b></td>\n    <td><b>60 months</b></td>\n</tr>', u'<tr class="trimDetail">\n<td><b>MSRP</b></td>\n<td>$17,673\xa0</td>\n<td>$17,673\xa0</td>\n<td>$17,673\xa0</td>\n<td>$17,673\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>ALG Residual %</b></td>\n<td>58\xa0</td>\n<td>49\xa0</td>\n<td>41\xa0</td>\n<td>33\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>ALG Residual Value</b></td>\n<td>$10,275\xa0</td>\n<td>$8,700\xa0</td>\n<td>$7,300\xa0</td>\n<td>$5,875\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>Money Factor</b></td>\n<td>0.002868167\xa0</td>\n<td>0.0029915\xa0</td>\n<td>0.003015833\xa0</td>\n<td>0.003092333\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>Payments</b></td>\n<td><a href="javascript:fillResidualValue(10275,17673,0.002868167,24);">Calculate</a></td>\n<td><a href="javascript:fillResidualValue(8700,17673,0.0029915,36);">Calculate</a></td>\n<td><a href="javascript:fillResidualValue(7300,17673,0.003015833,48);">Calculate</a></td>\n<td><a href="javascript:fillResidualValue(5875,17673,0.003092333,60);">Calculate</a></td>\n</tr>', u'<tr><td colspan="5" class="header">5dr HB Sport AT</td></tr>', u'<tr class="seeMoreRow"><td colspan="5"><a class="seeMore" href="#">See More</a></td></tr>', u'<tr class="trimDetail"><td>\xa0</td>\n    <td><b>24 months</b></td>\n    <td><b>36 months</b></td>\n    <td><b>48 months</b></td>\n    <td><b>60 months</b></td>\n</tr>', u'<tr class="trimDetail">\n<td><b>MSRP</b></td>\n<td>$18,693\xa0</td>\n<td>$18,693\xa0</td>\n<td>$18,693\xa0</td>\n<td>$18,693\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>ALG Residual %</b></td>\n<td>58\xa0</td>\n<td>50\xa0</td>\n<td>42\xa0</td>\n<td>34\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>ALG Residual Value</b></td>\n<td>$10,900\xa0</td>\n<td>$9,500\xa0</td>\n<td>$7,975\xa0</td>\n<td>$6,425\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>Money Factor</b></td>\n<td>0.002868167\xa0</td>\n<td>0.0029915\xa0</td>\n<td>0.003015833\xa0</td>\n<td>0.003092333\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>Payments</b></td>\n<td><a href="javascript:fillResidualValue(10900,18693,0.002868167,24);">Calculate</a></td>\n<td><a href="javascript:fillResidualValue(9500,18693,0.0029915,36);">Calculate</a></td>\n<td><a href="javascript:fillResidualValue(7975,18693,0.003015833,48);">Calculate</a></td>\n<td><a href="javascript:fillResidualValue(6425,18693,0.003092333,60);">Calculate</a></td>\n</tr>', u'<tr><td colspan="5" class="header">AlloyWhl|acdef</td></tr>', u'<tr class="seeMoreRow"><td colspan="5"><a class="seeMore" href="#">See More</a></td></tr>', u'<tr class="trimDetail"><td>\xa0</td>\n    <td><b>24 months</b></td>\n    <td><b>36 months</b></td>\n    <td><b>48 months</b></td>\n    <td><b>60 months</b></td>\n</tr>', u'<tr class="trimDetail">\n<td><b>MSRP</b></td>\n<td>$500\xa0</td>\n<td>$500\xa0</td>\n<td>$500\xa0</td>\n<td>$500\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>ALG Residual %</b></td>\n<td>\xa0</td>\n<td>\xa0</td>\n<td>\xa0</td>\n<td>\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>ALG Residual Value</b></td>\n<td>$350\xa0</td>\n<td>$275\xa0</td>\n<td>$225\xa0</td>\n<td>$175\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>Money Factor</b></td>\n<td>0.002868167\xa0</td>\n<td>0.0029915\xa0</td>\n<td>0.003015833\xa0</td>\n<td>0.003092333\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>Payments</b></td>\n<td><a href="javascript:fillResidualValue(350,500,0.002868167,24);">Calculate</a></td>\n<td><a href="javascript:fillResidualValue(275,500,0.0029915,36);">Calculate</a></td>\n<td><a href="javascript:fillResidualValue(225,500,0.003015833,48);">Calculate</a></td>\n<td><a href="javascript:fillResidualValue(175,500,0.003092333,60);">Calculate</a></td>\n</tr>', u'<tr><td colspan="5" class="header">Cruise|acdef</td></tr>', u'<tr class="seeMoreRow"><td colspan="5"><a class="seeMore" href="#">See More</a></td></tr>', u'<tr class="trimDetail"><td>\xa0</td>\n    <td><b>24 months</b></td>\n    <td><b>36 months</b></td>\n    <td><b>48 months</b></td>\n    <td><b>60 months</b></td>\n</tr>', u'<tr class="trimDetail">\n<td><b>MSRP</b></td>\n<td>$250\xa0</td>\n<td>$250\xa0</td>\n<td>$250\xa0</td>\n<td>$250\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>ALG Residual %</b></td>\n<td>\xa0</td>\n<td>\xa0</td>\n<td>\xa0</td>\n<td>\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>ALG Residual Value</b></td>\n<td>$225\xa0</td>\n<td>$200\xa0</td>\n<td>$175\xa0</td>\n<td>$150\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>Money Factor</b></td>\n<td>0.002868167\xa0</td>\n<td>0.0029915\xa0</td>\n<td>0.003015833\xa0</td>\n<td>0.003092333\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>Payments</b></td>\n<td><a href="javascript:fillResidualValue(225,250,0.002868167,24);">Calculate</a></td>\n<td><a href="javascript:fillResidualValue(200,250,0.0029915,36);">Calculate</a></td>\n<td><a href="javascript:fillResidualValue(175,250,0.003015833,48);">Calculate</a></td>\n<td><a href="javascript:fillResidualValue(150,250,0.003092333,60);">Calculate</a></td>\n</tr>', u'<tr><td colspan="5" class="header">Moonroof|abcde</td></tr>', u'<tr class="seeMoreRow"><td colspan="5"><a class="seeMore" href="#">See More</a></td></tr>', u'<tr class="trimDetail"><td>\xa0</td>\n    <td><b>24 months</b></td>\n    <td><b>36 months</b></td>\n    <td><b>48 months</b></td>\n    <td><b>60 months</b></td>\n</tr>', u'<tr class="trimDetail">\n<td><b>MSRP</b></td>\n<td>$850\xa0</td>\n<td>$850\xa0</td>\n<td>$850\xa0</td>\n<td>$850\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>ALG Residual %</b></td>\n<td>\xa0</td>\n<td>\xa0</td>\n<td>\xa0</td>\n<td>\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>ALG Residual Value</b></td>\n<td>$575\xa0</td>\n<td>$500\xa0</td>\n<td>$425\xa0</td>\n<td>$350\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>Money Factor</b></td>\n<td>0.002868167\xa0</td>\n<td>0.0029915\xa0</td>\n<td>0.003015833\xa0</td>\n<td>0.003092333\xa0</td>\n</tr>', u'<tr class="trimDetail">\n<td><b>Payments</b></td>\n<td><a href="javascript:fillResidualValue(575,850,0.002868167,24);">Calculate</a></td>\n<td><a href="javascript:fillResidualValue(500,850,0.0029915,36);">Calculate</a></td>\n<td><a href="javascript:fillResidualValue(425,850,0.003015833,48);">Calculate</a></td>\n<td><a href="javascript:fillResidualValue(350,850,0.003092333,60);">Calculate</a></td>\n</tr>']
+
+
+

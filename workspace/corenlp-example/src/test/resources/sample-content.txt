@@ -1,0 +1,59 @@
+I'm lucky if destination is within a 1/2 mile of actual location.
+Engine light.  Eventually (two visits) to a battery issue.  Replaced the battery and all good.
+Freon leak. Dealer put in dye to locate leak. 1 month ago
+
+Dealer could not duplicate.
+
+Mass air flow sensor replaced
+Rattling noise when open
+squeaky when slow stopping...more when cold
+(Copied from INT97): Plastic casing that connects rearview mirror to window and encases wiring falls off if the car hits a large bump in the road
+frequently does not recognize my verbal commands so I stopped using voice recognition
+air temp suddenly became noticeably warmer with AC on
+musty smell sometimes
+Dealer states that nothing is wrong, but essentially the nature of the DC transmission...
+BMW replaced the battery for free
+wear through of paint on the driver door handle
+tire sidewall bubble reported during a routine maintenance
+piping on the edge of the head restraint is showing wear
+Many small paint chips on hood and front bumper - a lot for a car with only 30,000 miles on it.
+I am not sure exactly where the rattle is occurring, but in the vicinity of the glovebox and probably not in the door.
+Run Flats lose a little air with wide temperature range,  Hot to cold.
+The computer keeps displaying failure of the electronic Engine Start - Insert an remove key.
+I simply gave up using the navigation and muse my iPhone for navi.
+Again, not one of the cars best features.
+This is my third BMW with Navigation and it still sucks.  My 2015 Mercedes system works much better.
+It doesn't stay in place. I have to straighten it out to make it smooth and straight.
+Should be easier to use without so many steps
+(Copied from EXT97): Bumper got stretched
+(Copied from AEN97): Prgramable memory of stations wiped clean every few weeks.
+Air smells musty after using ac. Would appear be some type of filter, just do not know and service dept could not pin point and not part of normal maintenace.
+(Copied from ENGTRN97): An engine fan malfunctioned, causing the engine to overheat. I had the car towed to the dealership. They replaced the fan for free. No problems since.
+on highway driving - hear noise and wind while driving
+(Copied from DEXP97): light indicates that tires need to be filled with air
+Trunk cargo partition would not release properly to allow the convertible top to go down
+The paint peeled off the bumber.
+
+
+All shoes that brush up against the bottom of the inside of the door, leave a scuff mark.
+Battery died this summer. Had to jump start it 2 times and then got a new battery at the dealership.
+Manual exterior opening frequently will not release necessitating use of key fob which also occasionally fails to release without repeated engagement
+Steps too confusing
+Doesn't recognize voice commands. Ford sync system FAR superior!
+Driving to Florida sun in Windows minimal cool air through vents
+
+(Copied from INT97): Seats scuffing
+연료펌프
+
+
+
+case  when odometer] <20000 then 10000 
+        when (odometer]>=20000) and ([odometer]<40000) then 30000 
+        when (odometer]>=40000) and ([odometer]<60000) then 50000 
+        when (odometer]>=60000) and ([odometer]<80000) then 70000 
+        when (odometer]>=80000) and ([odometer]<100000) then 90000 
+        when [dometer]>=100000 and ([odometer]<120000) then 110000
+        when (odometer]>=120000) and ([odometer] <140000) then 130000 
+        when (odometer]>=140000) and ([odometer] <160000) then 150000 
+        when ([odometer]>=160000)  then 1700000      end   
+        
